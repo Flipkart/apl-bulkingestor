@@ -4,12 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by anandhi on 11/12/15.
+ * Created by shukad on 09/12/15.
  */
 public class DataMerger {
 
-    public List<HashMap> mergeAll(List<HashMap> accruals, HashMap<String, List> items,HashMap<String, List> subItems){
-        Iterator<HashMap> accrualIterator = accruals.iterator();
+    public List<HashMap> mergeAll(List<HashMap> invoices, HashMap<String, List> items,HashMap<String, List> subItems){
+        Iterator<HashMap> accrualIterator = invoices.iterator();
         List<HashMap> bigFootFormatData = new LinkedList<HashMap>();
         while(accrualIterator.hasNext()){
             HashMap accrual = accrualIterator.next();

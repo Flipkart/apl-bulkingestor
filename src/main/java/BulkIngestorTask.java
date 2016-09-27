@@ -18,7 +18,7 @@ import java.util.List;
 
 
 /**
- * Created by anandhi on 13/12/15.
+ * Created by shukad on 09/12/15.
  */
 public class BulkIngestorTask implements Runnable {
     private String ids;
@@ -48,17 +48,17 @@ public class BulkIngestorTask implements Runnable {
         DataMerger merger = new DataMerger();
         Jsonizer jsonizer = new Jsonizer();
         BulkIngestorConnector bulkIngestorConnector = new BulkIngestorConnector();
-        AccrualConnector connector = new AccrualConnector();
+        InvoiceConnector connector = new InvoiceConnector();
         connector.getTransformer().populateTransformationColumnsForAccruals();
         Long timeBegin = System.currentTimeMillis();
-        List<HashMap> accrualsToIngest = merger.mergeAll(connector.getAccruals(ids),
-                connector.getAccrualItems(ids),
-                connector.getAccrualSubItems(ids));
+        List<HashMap> invoicesToIngest = merger.mergeAll(connector.getInvoices(ids),
+                connector.getInvoiceItems(ids),
+                connector.getInvoiceSubItems(ids));
         Gson gson = new GsonBuilder().serializeNulls().create();
         logger.info("******* printing json *********" );
-        logger.info(gson.toJson(accrualsToIngest));
+        logger.info(gson.toJson(invoicesToIngest));
         
-        Iterator<HashMap> accrualIterator = accrualsToIngest.iterator();
+        Iterator<HashMap> invoiceIterator = invoicesToIngest.iterator();
         String batchId = "INVOICE_".concat(String.valueOf(System.currentTimeMillis())).
                 concat("_").concat(Util.getTimeBasedIncrementalNumber(5).toString());
         logger.info("Time taken to extract and merge is " + (System.currentTimeMillis() - timeBegin) + "ms");
@@ -66,17 +66,17 @@ public class BulkIngestorTask implements Runnable {
         logger.info("Getting batch ingestor new batch object" + batchIngestor);
         Batch batch = batchIngestor.newBatch(batchId, entityUrl);
         logger.info("Got batch ingestor new batch object");
-        while(accrualIterator.hasNext()){
-            HashMap accrual = accrualIterator.next();
-            StringWriter accrualJson = jsonizer.serialize(accrual);
-            batch.add(accrualJson.toString());
+        while(invoiceIterator.hasNext()){
+            HashMap invoice = invoiceIterator.next();
+            StringWriter invoiceJson = jsonizer.serialize(invoice);
+            batch.add(invoiceJson.toString());
         }
         logger.info("Time taken to prepare batch is " + (System.currentTimeMillis() - prepareBatchBegin) + "ms");
         Long batchCommitBegin = System.currentTimeMillis();
         UploadResponse uploadResponse = batch.commit();
         logger.info("Time taken to commit batch is " + (System.currentTimeMillis() - batchCommitBegin) + "ms");
         bulkIngestorConnector.markIdsAsIngested(ids, uploadResponse.getLocation().get(0));
-        logger.info("Time taken to ingest batch -  " + batchId + " of size "  + accrualsToIngest.size() + " is "
+        logger.info("Time taken to ingest batch -  " + batchId + " of size "  + invoicesToIngest.size() + " is "
                 + (System.currentTimeMillis() - timeBegin) + "ms");
 
         connector.shutdown();

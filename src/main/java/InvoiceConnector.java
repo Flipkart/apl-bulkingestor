@@ -12,11 +12,11 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * Created by anandhi on 10/12/15.
+ * Created by shukad on 09/12/15.
  */
-public class AccrualConnector {
+public class InvoiceConnector {
 
-    private static Logger logger = Logger.getLogger(AccrualConnector.class);
+    private static Logger logger = Logger.getLogger(InvoiceConnector.class);
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static final String DB_NAME = "payment_b2b_production";
@@ -35,7 +35,7 @@ public class AccrualConnector {
     private Connection connection;
     private Transformer transformer = new Transformer();
 
-    public AccrualConnector(){
+    public InvoiceConnector(){
         initializeConnection();
 
     }
@@ -68,7 +68,7 @@ public class AccrualConnector {
         }
     }
 
-    public List<HashMap> getAccruals(String ids){
+    public List<HashMap> getInvoices(String ids){
         List<HashMap> results = new LinkedList<HashMap>();
         ResultSet rs = null;
         try {
@@ -113,7 +113,7 @@ public class AccrualConnector {
     }
 
 
-    public HashMap<String, List> getAccrualItems(String ids){
+    public HashMap<String, List> getInvoiceItems(String ids){
         HashMap<String, List> results = new HashMap<String, List>();
         ResultSet rs = null;
         try {
@@ -170,7 +170,7 @@ public class AccrualConnector {
         return results;
     }
 
-    public HashMap<String, List> getAccrualSubItems(String ids){
+    public HashMap<String, List> getInvoiceSubItems(String ids){
         HashMap<String, List> results = new HashMap<String, List>();
         ResultSet rs = null;
         try {

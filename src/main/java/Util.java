@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by anandhi on 12/12/15.
+ * Created by shukad on 09/12/15.
  */
 public class Util {
     private static final String DATE_TIME_FORMAT_WITH_SPACE = "yyyy-MM-dd HH:mm:ss";

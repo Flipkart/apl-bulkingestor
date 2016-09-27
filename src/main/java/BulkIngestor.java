@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 
 /**
- * Created by anandhi on 12/12/15.
+ * Created by shukad on 09/12/15.
  */
 public class BulkIngestor {
     private static Logger logger = Logger.getLogger(BulkIngestor.class);
@@ -14,14 +14,14 @@ public class BulkIngestor {
 
     public void startIngestion() throws Exception {
         BulkIngestorConnector bulkIngestorConnector = new BulkIngestorConnector();
-        String ids = bulkIngestorConnector.getAccrualsToBeIngested(BATCH_SIZE);
+        String ids = bulkIngestorConnector.getInvoicesToBeIngested(BATCH_SIZE);
         logger.info("************* ids for invoice ***********".toUpperCase() +"  "+ ids);
         ThreadPoolExecutor executor = new ThreadPoolExecutor(6, 6, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(100));
         executor.prestartAllCoreThreads();
         while(ids.length() > 10){
             BulkIngestorTask bulkIngestorTask = new BulkIngestorTask(ids);
             executor.execute(bulkIngestorTask);
-            ids = bulkIngestorConnector.getAccrualsToBeIngested(BATCH_SIZE);
+            ids = bulkIngestorConnector.getInvoicesToBeIngested(BATCH_SIZE);
             logger.info("************* ids for invoice ***********".toUpperCase() +"  "+ ids);
             while(executor.getQueue().size() > executor.getCorePoolSize()){
                 logger.info("Queue has enough batches to process, so waiting for 10 seconds");

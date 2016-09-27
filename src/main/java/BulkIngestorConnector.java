@@ -3,7 +3,7 @@ import org.apache.log4j.Logger;
 import java.sql.*;
 
 /**
- * Created by anandhi on 11/12/15.
+ * Created by shukad on 09/12/15.
  */
 public class BulkIngestorConnector {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -38,7 +38,7 @@ public class BulkIngestorConnector {
         }
     }
 
-    public String getAccrualsToBeIngested(int batchSize){
+    public String getInvoicesToBeIngested(int batchSize){
         String ids = "";
         try {
             String query = "select GROUP_CONCAT(CONCAT('''', A.id, '''')) from (select id from invoice_ingestion where status = 0 limit " + batchSize + ") A;";
